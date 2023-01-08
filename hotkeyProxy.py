@@ -27,7 +27,7 @@ def checkYaml():
 # Get information about the serial port from config.yaml
 def getSerial():
     with open("config.yaml") as fp:
-        file = yaml.load(fp, Loader=SafeLoader)
+        file = yaml.safe_load(fp)
         device = file['DEVICE_NAME']
         comport = file['COMPORT']
         baudrt = file['BAUDRATE']
