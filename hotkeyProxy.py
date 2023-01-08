@@ -104,6 +104,7 @@ def checkConnection(app = None):
                     # try starting the thread again
                     app.box_thread = threading.Thread(target = runBox)
                     app.box_thread.start()
+                    app.PortLabel.configure(text = f"Current Port: {port.device}")
 
         time.sleep(2) # Delay one second to keep resources down
     print("exiting connection thread")
