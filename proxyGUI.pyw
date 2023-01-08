@@ -270,7 +270,7 @@ class App(tk.Tk):
         key7 = tk.Button(master = self, text = "8", height = height, width = width, bg = BUTTONBG, fg = TEXTFG, command = lambda: self.keyButton(7))
         key4.place(x = setX, y = setY+offSet)
         key5.place(x = setX + offSet, y = setY+offSet)
-        key6.place(x = setX + offSet*2, y = setY+offSet)
+        key6.place(x = setX + offSet*2, y = setY+offSet) 
         key7.place(x = setX + offSet*3, y = setY+offSet)
         
 
