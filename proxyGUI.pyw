@@ -14,17 +14,17 @@ from PIL import Image, ImageTk
 from tkinter import filedialog
 
 # Create the thread here so as to remove errors within the class
-thread = threading.Thread(target=proxy.runBox)
+box_thread = threading.Thread(target=proxy.runBox)
 
 BACKGROUND = '#36393f'
 BUTTONBG = '#565b65'
 TEXTFG = '#dcddde'
 
 class App(tk.Tk):
-    def __init__(self, thread):
+    def __init__(self, box_thread):
         self.showOnStart = proxy.checkYaml()
 
-        self.thread = thread
+        self.box_thread = box_thread
         super().__init__()
         self.geometry("500x250+400+200")
         self.title('Hotkey Settings')      
@@ -49,21 +49,21 @@ class App(tk.Tk):
         # get the com port using the ID
         # read all data and store in a dictionary
         com = portDevice[portNames.index(self.option_var.get())]
-        with open('hotKeys.yaml', 'r') as f:
+        with open('config.yaml', 'r') as f:
             data = yaml.safe_load(f)
 
         # change the comport
         data['COMPORT'] = com
 
         # dump entire dictionary into the file
-        with open('hotKeys.yaml', 'w') as f:    
+        with open('config.yaml', 'w') as f:    
             yaml.safe_dump(data, f)
  
         # Restart the proxy thread   
-        self.thread.do_run=False
-        self.thread.join()
-        self.thread = threading.Thread(target=proxy.runBox)
-        self.thread.start()
+        self.box_thread.do_run=False
+        self.box_thread.join()
+        self.box_thread = threading.Thread(target=proxy.runBox)
+        self.box_thread.start()
 
         # Change the label from the original window
         self.PortLabel.configure(text = f"Current Port: {(proxy.getSerial())['ComPort']}")
@@ -169,14 +169,14 @@ class App(tk.Tk):
             command = f"start /d\"{path}\" {file}"
             
             # Copy all data from yaml file
-            with open('hotKeys.yaml', 'r') as f:
+            with open('config.yaml', 'r') as f:
                 data = yaml.safe_load(f)
 
             # change the keys command to command
             data['KeyCommands'][key] = command
 
             # dump entire dictionary back into the file
-            with open('hotKeys.yaml', 'w') as f:    
+            with open('config.yaml', 'w') as f:    
                 yaml.safe_dump(data, f)
             
             label.configure(text = f"Directory saved to key #{key+1}", fg = "green")
@@ -188,27 +188,27 @@ class App(tk.Tk):
                 return
 
             # Copy all data from yaml file
-            with open('hotKeys.yaml', 'r') as f:
+            with open('config.yaml', 'r') as f:
                 data = yaml.safe_load(f)
 
             # change the keys command to command
             data['KeyCommands'][key] = cmd
 
             # dump entire dictionary back into the file
-            with open('hotKeys.yaml', 'w') as f:    
+            with open('config.yaml', 'w') as f:    
                 yaml.safe_dump(data, f)
             
             label.configure(text = f"Command saved to key #{key+1}", fg = "green")
 
         def clearKey():
-            with open('hotKeys.yaml', 'r') as f:
+            with open('config.yaml', 'r') as f:
                 data = yaml.safe_load(f)
 
             # change the keys command to command
             data['KeyCommands'][key] = None
 
             # dump entire dictionary back into the file
-            with open('hotKeys.yaml', 'w') as f:    
+            with open('config.yaml', 'w') as f:    
                 yaml.safe_dump(data, f)
             
             label.configure(text = f"Key #{key+1} cleared!", fg = "green")
@@ -276,9 +276,16 @@ class App(tk.Tk):
 
 
 if __name__ == "__main__":
-    app = App(thread)
-    thread.start()
+    app = App(box_thread)
+    connect_thread = threading.Thread(target=proxy.checkConnection, args=(app,))
+    app.box_thread.start()
+    connect_thread.start()
     if(not app.showOnStart):
         app.hide_window()
     app.mainloop()
-    thread.do_run=False
+
+    connect_thread.do_run=False
+    app.box_thread.do_run=False
+
+    connect_thread.join()
+    app.box_thread.join()
