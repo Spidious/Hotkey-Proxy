@@ -35,8 +35,6 @@ class App(tk.Tk):
         self.option_var = tk.StringVar()
         self.resizable(False, False)
         self.configure(bg=BACKGROUND)
-        # p1 = tk.PhotoImage(file = 'hotKey.png')
-        # self.iconphoto(False, p1)
         
     def changePort(self,  *args):
         # Set port names and com ports
