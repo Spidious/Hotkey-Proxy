@@ -8,11 +8,18 @@ import time
 
 
 
-# Get the COM port and baud rate from the config file
+# Create the Yaml file using default settings
 def checkYaml():
+    ######## Default Settings ############
+    dev_name = 'Arduino Micro'
+    baudrate = 9600
+    comport = None
+    base_comm = None
+    num_keys = 8
+    ######################################
     if not os.path.exists("config.yaml"):
         with open("config.yaml", "w") as fp:
-            data = {'DEVICE_NAME': 'Arduino Micro', 'BAUDRATE': 115200, 'COMPORT': None, 'KeyCommands': [None]*8}
+            data = {'DEVICE_NAME': dev_name, 'BAUDRATE': baudrate, 'COMPORT': comport, 'KeyCommands': [base_comm]*num_keys}
             yaml.safe_dump(data, fp)
         return True
     return False
