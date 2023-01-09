@@ -7,7 +7,7 @@ This app does not show a terminal, to change this change the extension of the pr
 
 # Required Installations
 Requires the following libraries to be installed, can be installed by pip (as written):
-*PySerial
-*pyyaml
-*pystray
-*pywin32
+* PySerial
+* pyyaml
+* pystray
+* pywin32
