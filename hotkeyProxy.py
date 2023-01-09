@@ -1,6 +1,7 @@
 import serial
 import serial.tools.list_ports as list_ports
 import os
+import winshell
 from pathlib import Path
 from win32com.client import Dispatch
 import yaml
@@ -11,7 +12,7 @@ import time
 # Create a shortcut to proxyGUI.pyw
 # Create in current path if no other path is provided
 def createShortcut(dest_path = Path.cwd()):
-    path = os.path.join(dest_path, "box_shortcut.lnk")
+    path = os.path.join(dest_path, 'HotKey Interface.lnk')
     target = os.path.join(dest_path, "proxyGUI.pyw")
     icon = os.path.join(dest_path, 'hotkey.ico')
 
@@ -25,9 +26,11 @@ def createShortcut(dest_path = Path.cwd()):
 
 # Check if added to startup folder :: TODO If not in startup folder create a popup within the main window that asks if you want to add it to startup, only if its the first time opening the window this session
 def checkStartup():
-    pass
+    startup = winshell.startup()
+    path = os.path.join(startup, "HotKey Interface.lnk")
+    return os.path.exists(path)
 
-# Create the Yaml file using default settings :: TODO also check if a shortcut exists within the file this the apps file
+# Create the Yaml file using default settings
 def checkYaml():
     ######## Default Settings ############
     dev_name = 'Arduino Micro'
@@ -36,6 +39,12 @@ def checkYaml():
     base_comm = None
     num_keys = 8
     ######################################
+
+    # Create the shortcut in folder if not currently there
+    if not os.path.exists('HotKey Interface.lnk'):
+        createShortcut()
+
+    
     if not os.path.exists("config.yaml"):
         with open("config.yaml", "w") as fp:
             data = {'DEVICE_NAME': dev_name, 'BAUDRATE': baudrate, 'COMPORT': comport, 'KeyCommands': [base_comm]*num_keys}
