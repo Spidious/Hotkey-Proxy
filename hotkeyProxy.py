@@ -1,7 +1,6 @@
 import serial
 import serial.tools.list_ports as list_ports
 import os
-import winshell
 from pathlib import Path
 from win32com.client import Dispatch
 import yaml
