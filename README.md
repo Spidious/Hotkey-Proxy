@@ -11,3 +11,7 @@ Requires the following libraries to be installed, can be installed by pip (as wr
 * pyyaml
 * pystray
 * pywin32
+
+***
+
+Requires installation of Python 3.9 or later
