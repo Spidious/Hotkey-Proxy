@@ -21,6 +21,7 @@ class App(tk.Tk):
     def __init__(self, box_thread):
         self.showOnStart = proxy.checkYaml()
 
+        # self.wm_attributes('-toolwindow', True)
         self.box_thread = box_thread
         super().__init__()
         self.geometry("500x250+400+200")
@@ -171,10 +172,10 @@ class App(tk.Tk):
                 label.configure(text = "Please select a file", fg = "red")
                 return
             # Parse the input to create the command variable
-            path = fileEntry.get()
-            file = (path.split('/'))
-            file = file[len(file)-1]
-            path = (path.strip(file)).strip('/')
+            path = os.path.normpath(fileEntry.get())
+            filePath = (path.split('\\'))
+            file = filePath.pop()
+            path = '\\'.join(filePath)
             command = f"start /d\"{path}\" {file}"
             
             # Copy all data from yaml file
