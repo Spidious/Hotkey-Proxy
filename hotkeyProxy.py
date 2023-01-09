@@ -1,14 +1,33 @@
 import serial
 import serial.tools.list_ports as list_ports
 import os
+from pathlib import Path
+from win32com.client import Dispatch
 import yaml
 from yaml.loader import SafeLoader
 import threading
 import time
 
+# Create a shortcut to proxyGUI.pyw
+# Create in current path if no other path is provided
+def createShortcut(dest_path = Path.cwd()):
+    path = os.path.join(dest_path, "box_shortcut.lnk")
+    target = os.path.join(dest_path, "proxyGUI.pyw")
+    icon = os.path.join(dest_path, 'hotkey.ico')
+
+    shell = Dispatch('WScript.Shell')
+    shortcut = shell.CreateShortCut(path)
+    shortcut.Targetpath = target
+    shortcut.WorkingDirectory = str(Path.cwd())
+    shortcut.IconLocation = icon
+    shortcut.save()
 
 
-# Create the Yaml file using default settings
+# Check if added to startup folder :: TODO If not in startup folder create a popup within the main window that asks if you want to add it to startup, only if its the first time opening the window this session
+def checkStartup():
+    pass
+
+# Create the Yaml file using default settings :: TODO also check if a shortcut exists within the file this the apps file
 def checkYaml():
     ######## Default Settings ############
     dev_name = 'Arduino Micro'
