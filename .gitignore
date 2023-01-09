@@ -1,0 +1,5 @@
+*.lnk
+*.png
+*.yaml
+*.pyc
+*(old)*
