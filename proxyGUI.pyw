@@ -90,11 +90,10 @@ class App(tk.Tk):
             portNames.append(port.description)
 
         # Create a option menu
-        self.option_var.set((proxy.getSerial())['ComPort'])
+        self.option_var.set(f"Current Port: {(proxy.getSerial())['ComPort']}")
         option_menu = tk.OptionMenu(
             popup,
             self.option_var,
-            portNames[0],
             *portNames,
             command = self.changePort
         )
