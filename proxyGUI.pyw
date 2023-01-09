@@ -107,10 +107,25 @@ class App(tk.Tk):
         exitButton.place(x = 380, y = 19)
 
     def makeChangeButton(self):
+        def startupButton():
+            if(not proxy.checkStartup()):
+                self.startupButton.configure(text = "Dont run on Startup")
+                proxy.addStartup()
+            else:
+                self.startupButton.configure(text = "Run on Startup")
+                proxy.removeStartup()
+
         self.PortLabel.place(x = 0, y = 0)
 
-        self.COMButton = tk.Button(self, text = "Change Port", command = self.portButton, bg = BUTTONBG, fg = TEXTFG)
+        self.COMButton = tk.Button(self, text = "Change Port", command = self.portButton, bg = BUTTONBG, fg = TEXTFG, width = 15)
         self.COMButton.place(x = 0, y = 20)
+
+        self.startupButton = tk.Button(self, command = startupButton, bg = BUTTONBG, fg = TEXTFG, width = 15)
+        if(proxy.checkStartup()):
+            self.startupButton.configure(text = "Dont run on Startup")
+        else:
+            self.startupButton.configure(text = "Run on Startup")
+        self.startupButton.place(x = 0, y = 50)
 
     def quit_window(self, icon, item):
         icon.stop()
