@@ -4,3 +4,14 @@ Currently needs to be manually added to the startup folder to run on start. Open
 App will start with no window visible, open window by right clicking icon at bottom right and select 'show'. To exit the script you must right click the icon and select 'quit'. 
 
 This app does not show a terminal, to change this change the extension of the proxyGUI.pyw file to '.py'
+
+# Required Installations
+Requires the following libraries to be installed, can be installed by pip (as written):
+* PySerial
+* pyyaml
+* pystray
+* pywin32
+
+***
+
+Requires installation of Python 3.9 or later
