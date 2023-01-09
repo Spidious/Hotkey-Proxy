@@ -11,14 +11,15 @@ import time
 # Create a shortcut to proxyGUI.pyw
 # Create in current path if no other path is provided
 def createShortcut(dest_path = Path.cwd()):
+    cur_path = Path.cwd()
     path = os.path.join(dest_path, 'HotKey Interface.lnk')
-    target = os.path.join(dest_path, "proxyGUI.pyw")
-    icon = os.path.join(dest_path, 'hotkey.ico')
+    target = os.path.join(cur_path, "proxyGUI.pyw")
+    icon = os.path.join(cur_path, 'hotkey.ico')
 
     shell = Dispatch('WScript.Shell')
     shortcut = shell.CreateShortCut(path)
     shortcut.Targetpath = target
-    shortcut.WorkingDirectory = str(Path.cwd())
+    shortcut.WorkingDirectory = str(cur_path)
     shortcut.IconLocation = icon
     shortcut.save()
 
@@ -29,10 +30,21 @@ def checkStartup():
     path = os.path.join(startup, "HotKey Interface.lnk")
     return os.path.exists(path)
 
+# Adds shortcut to startup
+def addStartup():
+    path = f'C:\\Users\\{os.getlogin()}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup'
+    createShortcut(path)
+
+# Removes shortcut from startup
+def removeStartup():
+    path = f'C:\\Users\\{os.getlogin()}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup'
+    os.remove(os.path.join(path, 'HotKey Interface.lnk'))
+
 # Create the Yaml file using default settings
 def checkYaml():
     ######## Default Settings ############
     dev_name = 'Arduino Micro'
+    startup = False
     baudrate = 9600
     comport = None
     base_comm = None
@@ -46,7 +58,7 @@ def checkYaml():
     
     if not os.path.exists("config.yaml"):
         with open("config.yaml", "w") as fp:
-            data = {'DEVICE_NAME': dev_name, 'BAUDRATE': baudrate, 'COMPORT': comport, 'KeyCommands': [base_comm]*num_keys}
+            data = {'DEVICE_NAME': dev_name, 'BAUDRATE': baudrate, 'COMPORT': comport, 'STARTUP': startup, 'KeyCommands': [base_comm]*num_keys}
             yaml.safe_dump(data, fp)
         return True
     return False
@@ -56,9 +68,10 @@ def getSerial():
     with open("config.yaml") as fp:
         file = yaml.safe_load(fp)
         device = file['DEVICE_NAME']
+        startup = file['STARTUP']
         comport = file['COMPORT']
         baudrt = file['BAUDRATE']
-    output = {'Device': device, 'ComPort': comport, 'BaudRate': baudrt}
+    output = {'Device': device, 'Startup': startup, 'ComPort': comport, 'BaudRate': baudrt}
     return output
 
 # Runs from gui file, this is the actual proxy
@@ -138,7 +151,10 @@ def checkConnection(app = None):
                     # try starting the thread again
                     app.box_thread = threading.Thread(target = runBox)
                     app.box_thread.start()
-                    app.PortLabel.configure(text = f"Current Port: {port.device}")
+                    try:
+                        app.PortLabel.configure(text = f"Current Port: {port.device}")
+                    except:
+                        pass
 
         time.sleep(2) # Delay one second to keep resources down
     print("exiting connection thread")

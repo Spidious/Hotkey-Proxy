@@ -1,6 +1,4 @@
-#pip install PySerial
-#pip install pyyaml
-#pip install pystray
+
 import threading
 import os
 import tkinter as tk
@@ -122,13 +120,13 @@ class App(tk.Tk):
     def show_window(self, icon, item):
         icon.stop()
         self.after(0,self.deiconify())
+        self.PortLabel.configure(text=f"Current Port: {(proxy.getSerial())['ComPort']}")
 
     def hide_window(self):
         self.withdraw()
         image=Image.open("hotkey.ico")
         menu=(item('Quit', self.quit_window),
-            item('Show', self.show_window),
-            item('test 0', lambda: os.system(proxy.getCommand(0)))
+            item('Show', self.show_window)
         )
         icon=pystray.Icon("name", image, 'HotKey Box', menu)
         icon.run()
@@ -275,7 +273,7 @@ class App(tk.Tk):
 
 if __name__ == "__main__":
     app = App(box_thread)
-    connect_thread = threading.Thread(target=proxy.checkConnection, args=(app,))
+    connect_thread = threading.Thread(target=proxy.checkConnection, args=(app,), daemon = True)
     app.box_thread.start()
     connect_thread.start()
     if(not app.showOnStart):
