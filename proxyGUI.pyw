@@ -1,6 +1,7 @@
 #pip install PySerial
 #pip install pyyaml
 #pip install pystray
+#pip install pywin32
 import threading
 import os
 import tkinter as tk
