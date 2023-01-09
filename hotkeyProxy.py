@@ -26,7 +26,7 @@ def createShortcut(dest_path = Path.cwd()):
 
 # Check if added to startup folder :: TODO If not in startup folder create a popup within the main window that asks if you want to add it to startup, only if its the first time opening the window this session
 def checkStartup():
-    startup = winshell.startup()
+    startup = f'C:\\Users\\{os.getlogin()}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup'
     path = os.path.join(startup, "HotKey Interface.lnk")
     return os.path.exists(path)
 
