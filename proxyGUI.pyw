@@ -17,6 +17,8 @@ BACKGROUND = '#36393f'
 BUTTONBG = '#565b65'
 TEXTFG = '#dcddde'
 
+#N8620H
+
 class App(tk.Tk):
     def __init__(self, box_thread):
         self.showOnStart = proxy.checkYaml()

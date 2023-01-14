@@ -4,7 +4,7 @@ import yaml
 import json
 #pip install keyboard
 
-with open('test keylogger/logger.yaml', 'w') as fp:
+with open('logger.yaml', 'w') as fp:
     data = {'keyCombos': {}}
     yaml.safe_dump(data, fp)
 
@@ -55,34 +55,35 @@ class App(tk.Tk):
         
         newEvents = list((event.to_json()) for event in self.keyList)
 
-        with open('test keylogger/logger.yaml', 'r') as fp:
+        with open('logger.yaml', 'r') as fp:
             data = yaml.safe_load(fp)
         size = len(data['keyCombos'])
         data['keyCombos'][f"combo #{size}"] = []
-        with open('test keylogger/logger.yaml', 'w') as fp:
+        with open('logger.yaml', 'w') as fp:
             yaml.safe_dump(data, fp)
 
         for event in newEvents:
-            with open("test keylogger/logger.yaml", 'r') as fp:
+            with open("logger.yaml", 'r') as fp:
                 data = yaml.safe_load(fp)
 
             data['keyCombos'][f"combo #{size}"].append(event)
 
-            with open("test keylogger/logger.yaml", 'w') as fp:
+            with open("logger.yaml", 'w') as fp:
 
                 yaml.safe_dump(data, fp)
 
 def executeKeys():
-    with open("test keylogger/logger.yaml", 'r') as fp:
+    with open("logger.yaml", 'r') as fp:
         data = yaml.safe_load(fp)
 
     eventList = []
     for event in data['keyCombos']['combo #0']:
-        event = convToKeyEvent(json.loads(event))
+        eventList.append(convToKeyEvent(json.loads(event)))
 
-        key = event.scan_code or event.name
-        keyboard.press(key) if event.event_type == keyboard.KEY_DOWN else keyboard.release(key)
-        print(event.event_type)
+        # key = event.scan_code or event.name
+        # keyboard.press(key) if event.event_type == keyboard.KEY_DOWN else keyboard.release(key)
+        # print(event.event_type)
+    keyboard.play(eventList, speed_factor=3)
 
 
         
