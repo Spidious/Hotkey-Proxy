@@ -37,6 +37,9 @@ class App(tk.Tk):
         self.configure(bg=BACKGROUND)
         
     def changePort(self,  *args):
+        '''
+        Change the connected port from the drowdown list
+        '''
         # Set port names and com ports
         portNames = []
         portDevice = []
@@ -67,6 +70,11 @@ class App(tk.Tk):
         self.PortLabel.configure(text = f"Current Port: {(proxy.getSerial())['ComPort']}")
 
     def portButton(self):
+        '''
+        Define the action for when the change port button is pressed
+        Create a window
+        '''
+
         # Disable use of other window while this window is active
         def exitButton():
             self.deiconify()
@@ -92,7 +100,7 @@ class App(tk.Tk):
         for port in comports():
             portNames.append(port.description)
 
-        # Create a option menu
+        # Create a option menu with the action changePort
         self.option_var.set(f"Current Port: {(proxy.getSerial())['ComPort']}")
         option_menu = tk.OptionMenu(
             popup,
@@ -231,36 +239,36 @@ class App(tk.Tk):
         popup.resizable(False, False)
         # popup.attributes("-topmost", True)
         popup.title(f"Change Key #{key+1} Command")
-        popup.geometry("500x150+400+200")
+        popup.geometry("500x250+400+200")
         popup.configure(bg = BACKGROUND)
 
         # create open file explorer button
         fileBtn = ttk.Button(popup, text = "Open File", command = getFile)
-        fileBtn.place(x=10, y=25)
+        fileBtn.place(x=10, y=45)
 
         # create a label
         label = tk.Label(popup, text='Select a file or enter a terminal command', bg = BACKGROUND, fg = TEXTFG)
-        label.pack(pady=5)
+        label.pack(pady=15)
         # Create file entry box
         fileEntryVar = tk.StringVar()
         fileEntryVar.set("File Name")
         fileEntry = ttk.Entry(popup, textvariable=fileEntryVar, width=50)
-        fileEntry.place(x=90, y = 27)
+        fileEntry.place(x=90, y = 47)
 
 
         # Command entry zone
         cmdlabel = tk.Label(popup, text = "Enter Cmd:", bg = BACKGROUND, fg = TEXTFG)
-        cmdlabel.place(x =20, y = 75)
+        cmdlabel.place(x =20, y = 95)
 
         commandEntryVar = tk.StringVar()
         commandEntry = tk.Entry(popup, textvariable=commandEntryVar, width=50)
-        commandEntry.place(x=90, y = 77)
+        commandEntry.place(x=90, y = 97)
 
         # assign the button
-        clearBtn = tk.Button(popup, text= 'Clear Key', fg = TEXTFG, bg = BUTTONBG, width = 9, command = clearKey).place(x = 410, y = 10)
-        applyFileBtn = tk.Button(popup, text= 'Apply File', fg = TEXTFG, bg = BUTTONBG, width= 9, command = applyAppOpen).place(x = 410, y = 40)
-        applyCmdBtn = tk.Button(popup, text = 'Apply CMD', fg = TEXTFG, bg = BUTTONBG, width=9, command = applyCMD).place(x = 410, y = 70)
-        exitBtn = tk.Button(popup, text = 'Done', fg = TEXTFG, bg = BUTTONBG, width= 9, command = exitButton).place(x = 410, y = 100)
+        clearBtn = tk.Button(popup, text= 'Clear Key', fg = TEXTFG, bg = BUTTONBG, width = 9, command = clearKey).place(x = 410, y = 30)
+        applyFileBtn = tk.Button(popup, text= 'Apply File', fg = TEXTFG, bg = BUTTONBG, width= 9, command = applyAppOpen).place(x = 410, y = 60)
+        applyCmdBtn = tk.Button(popup, text = 'Apply CMD', fg = TEXTFG, bg = BUTTONBG, width=9, command = applyCMD).place(x = 410, y = 90)
+        exitBtn = tk.Button(popup, text = 'Done', fg = TEXTFG, bg = BUTTONBG, width= 9, command = exitButton).place(x = 410, y = 120)
 
     def keyEditButtons(self):
         height = 3
