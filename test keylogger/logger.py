@@ -2,6 +2,9 @@ import tkinter as tk
 import keyboard
 import yaml
 import json
+from keyboard.__init__ import _os_keyboard
+import time
+
 #pip install keyboard
 
 with open('logger.yaml', 'w') as fp:
@@ -73,45 +76,20 @@ class App(tk.Tk):
                 yaml.safe_dump(data, fp)
 
 def executeKeys():
+
     with open("logger.yaml", 'r') as fp:
         data = yaml.safe_load(fp)
 
     eventList = []
-    for event in data['keyCombos']['combo #0']:
-        eventList.append(convToKeyEvent(json.loads(event)))
+    for keyEvent in data['keyCombos']['combo #0']:
+        event = convToKeyEvent(json.loads(keyEvent))
 
-        # key = event.scan_code or event.name
-        # keyboard.press(key) if event.event_type == keyboard.KEY_DOWN else keyboard.release(key)
-        # print(event.event_type)
-    keyboard.play(eventList, speed_factor=3)
-
-
-        
+        (keyboard.press(event.name)) if event.event_type == 'down' else (keyboard.release(event.name))
 
 
 
-
-# class smallkeyEvent(object):
-#     type = None
-#     key = None
-#     code = None
-#     time = None
-
-#     def __init__(self, event):
-#         self.type = event.event_type
-#         self.key = event.name
-#         self.code = event.scan_code
-#         self.time = event.time
-
-#     def to_dict(self):
-#         return dict((attr, getattr(self, attr)) for attr in ['type', 'code', 'time'] if not attr.startswith('_'))
-
-#     def __repr__(self):
-#         return f"keyEvent({self.type}, {self.code}, {self.time})"
-
-    
 
 
 if __name__ == "__main__":
     app = App()
-    app.mainloop()
+    app.mainloop()  
