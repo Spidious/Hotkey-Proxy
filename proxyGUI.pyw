@@ -9,6 +9,7 @@ from pystray import MenuItem as item
 import pystray
 from PIL import Image, ImageTk
 from tkinter import filedialog
+import keylogger
 
 # Create the thread here so as to remove errors within the class
 box_thread = threading.Thread(target=proxy.runBox)
@@ -233,6 +234,39 @@ class App(tk.Tk):
             
             label.configure(text = f"Key #{key+1} cleared!", fg = "green")
 
+        def keyLogger_btn():
+            def start_recording(self):
+                stopBtn.place(x = 20, y = 200)
+                keyBind.remove_combo()
+                keyBind.startRecord()
+
+            def stop_recording(self):
+                keyBind.stopRecord()
+                keyLabel.configure(text = f"Key Bind: {keyBind}")
+                startBtn.place_forget()
+                stopBtn.place_forget()
+                        
+            def applyKeys(keybind_obj):
+                strList = keylogger.combo_to_str(keyBind)
+
+                with open('config.yaml', 'r') as fp:
+                    data = yaml.safe_load(fp)
+
+                data['KeyCommands'][key] = {'key_bind': strList}
+
+                with open('config.yaml', 'w') as fp: 
+                    yaml.safe_dump(data, fp)
+
+            keyBind = keylogger.keyCombo()
+            keyLabel.place(x = 150, y = 140)
+            startBtn = tk.Button(popup, text = 'Start Recording', fg = TEXTFG, bg = BUTTONBG, width = 15, command = lambda: start_recording(popup))
+            startBtn.place(x = 20, y = 170)
+            stopBtn = tk.Button(popup, text = 'Stop Recording', fg = TEXTFG, bg = BUTTONBG, widt = 15, command = lambda: stop_recording(popup))
+            applyLoggerBtn = tk.Button(popup, text = 'Apply Keys', fg = TEXTFG, bg = BUTTONBG, width = 9, command = lambda: applyKeys(keyBind)).place(x = 410, y = 160)
+
+
+
+
         # create popup data
         popup = tk.Toplevel(self)
         popup.protocol('WM_DELETE_WINDOW', exitButton)
@@ -264,11 +298,16 @@ class App(tk.Tk):
         commandEntry = tk.Entry(popup, textvariable=commandEntryVar, width=50)
         commandEntry.place(x=90, y = 97)
 
+        # Make keyLabel
+        keyLabel = tk.Label(popup, text = '', fg = TEXTFG, bg = BACKGROUND)
+
         # assign the button
         clearBtn = tk.Button(popup, text= 'Clear Key', fg = TEXTFG, bg = BUTTONBG, width = 9, command = clearKey).place(x = 410, y = 30)
         applyFileBtn = tk.Button(popup, text= 'Apply File', fg = TEXTFG, bg = BUTTONBG, width= 9, command = applyAppOpen).place(x = 410, y = 60)
         applyCmdBtn = tk.Button(popup, text = 'Apply CMD', fg = TEXTFG, bg = BUTTONBG, width=9, command = applyCMD).place(x = 410, y = 90)
         exitBtn = tk.Button(popup, text = 'Done', fg = TEXTFG, bg = BUTTONBG, width= 9, command = exitButton).place(x = 410, y = 120)
+        loggerBtn = tk.Button(popup, text = 'Create Keybind', fg = TEXTFG, bg = BUTTONBG, widt = 15, command = keyLogger_btn).place(x = 20, y = 140)
+        
 
     def keyEditButtons(self):
         height = 3

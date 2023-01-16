@@ -7,6 +7,7 @@ import yaml
 from yaml.loader import SafeLoader
 import threading
 import time
+import keylogger
 
 # Create a shortcut to proxyGUI.pyw
 # Create in current path if no other path is provided
@@ -99,10 +100,15 @@ def runBox( *args):
 
                 # for every character in the input execute it as a command
                 for i in serialString:
-                    try:
-                        os.system(getCommand(int(i)))
-                    except:
-                        pass
+                    comm = getCommand(int(i))
+                    if 'key_bind' in comm:
+                        keyLogger = keylogger.keyCombo(comm['key_bind'])
+                        keyLogger.run()
+                    else:
+                        try:
+                            os.system(comm)
+                        except:
+                            pass
         except Exception as e:  # If something causes error, print error and break
             print(e)
             break
