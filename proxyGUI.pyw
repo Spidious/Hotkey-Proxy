@@ -13,6 +13,8 @@ import keylogger
 
 # Create the thread here so as to remove errors within the class
 box_thread = threading.Thread(target=proxy.runBox)
+# Set application priority
+proxy.setpriority(priority = 4)
 
 BACKGROUND = '#36393f'
 BUTTONBG = '#565b65'
