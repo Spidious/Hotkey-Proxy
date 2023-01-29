@@ -55,7 +55,6 @@ def _check_thread(thread: threading.Thread, des_name: str) -> bool:
 
     
 
-
 def serial_listener():
     '''
     Continuously check the serial port for new input\n
