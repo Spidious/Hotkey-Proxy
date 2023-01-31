@@ -26,4 +26,4 @@ Ignore redesign folder
 
 Allows at most 8 keys. It will work with less however the positions of the keys on the app are looking for serial inputs 0-7 going across the rows top to bottom.
 
-I used an Arduino Micro that outputs 0 through 7 depending on the pressed keys. The keys are wired to the digital inputs 2, 3, 4, 5, 6, 7, 8, and 9. The other end wired to ground.
+I used an Arduino Micro that outputs 0 through 7 depending on the pressed keys. The keys are wired to the digital inputs 2, 3, 4, 5, 6, 7, 8, and 9. The other end wired to ground. The code used is provided in the .ino file.
